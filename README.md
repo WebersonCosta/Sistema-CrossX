@@ -2,17 +2,17 @@
 Este guia fornecerá instruções detalhadas sobre como configurar, instalar e testar o sistema CrossX. Este documento é destinado aos professores avaliadores do projeto.
 
 ## Sumário
-- [Visão Geral do Projeto](#visao-geral-do-projeto)
-- [Pré-requisitos](#pre-requisitos)
-- [Instalação](#instalacao)
-- [Configuração](#configuracao)
-- [Execução do Sistema](#execucao-do-sistema)
+- [Visao Geral do Projeto](#visao-geral-do-projeto)
+- [Pre-requisitos](#pre-requisitos)
+- [Instalacao](#instalacao)
+- [Configuracao](#configuracao)
+- [Execucao do Sistema](#execucao-do-sistema)
 - [Testando o Sistema](#testando-o-sistema)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [API Documentation](#api-documentation)
 - [Troubleshooting](#troubleshooting)
 
-## Visão Geral do Projeto
+## Visao Geral do Projeto
 O **CrossX** é um sistema de gerenciamento para academias, permitindo o cadastro de alunos e o registro de pagamentos. O sistema possui uma interface web e uma API REST para manipulação dos dados.
 
 ### Principais Funcionalidades
@@ -24,14 +24,14 @@ O **CrossX** é um sistema de gerenciamento para academias, permitindo o cadastr
 
 - API REST para integração com outros sistemas
 
-## Pré-requisitos
+## Pre-requisitos
 - Python 3.8 ou superior
 
 - pip (gerenciador de pacotes do Python)
 
 - Navegador web moderno (Chrome, Firefox, Edge, etc.)
 
-## Instalação
+## Instalacao
 1. Clone ou descompacte o projeto
 Se estiver recebendo o projeto como um arquivo compactado, descompacte-o em uma pasta de sua preferência.
 
@@ -72,7 +72,7 @@ source venv/bin/activate
 pip install Flask Flask-SQLAlchemy
 
 ```
-## Configuração
+## Configuracao
 ### Variáveis de Ambiente (Opcional)
 O sistema já está configurado para funcionar com valores padrão, mas você pode personalizar as seguintes variáveis:
 
@@ -96,7 +96,7 @@ set SECRET_KEY=sua-chave-secreta
 export SECRET_KEY=sua-chave-secreta
 
 ```
-## Execução do Sistema
+## Execucao do Sistema
 1. Ative o ambiente virtual (se ainda não estiver ativo)
 
 - No Windows
