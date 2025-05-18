@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}CrossX - Novo Aluno{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title mb-0">Cadastrar Novo Aluno</h2>
+            </div>
+            <div class="card-body">
+                <form id="formNovoAluno">
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="nome" class="form-label">Nome*</label>
+                            <input type="text" class="form-control" id="nome" name="Nome" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="endereco" class="form-label">Endereço</label>
+                            <input type="text" class="form-control" id="endereco" name="Endereco">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label for="cidade" class="form-label">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" name="Cidade">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="estado" class="form-label">Estado</label>
+                            <select class="form-select" id="estado" name="Estado">
+                                <option value="">Selecione...</option>
+                                <option value="AC">AC</option>
+                                <option value="AL">AL</option>
+                                <option value="AP">AP</option>
+                                <option value="AM">AM</option>
+                                <option value="BA">BA</option>
+                                <option value="CE">CE</option>
+                                <option value="DF">DF</option>
+                                <option value="ES">ES</option>
+                                <option value="GO">GO</option>
+                                <option value="MA">MA</option>
+                                <option value="MT">MT</option>
+                                <option value="MS">MS</option>
+                                <option value="MG">MG</option>
+                                <option value="PA">PA</option>
+                                <option value="PB">PB</option>
+                                <option value="PR">PR</option>
+                                <option value="PE">PE</option>
+                                <option value="PI">PI</option>
+                                <option value="RJ">RJ</option>
+                                <option value="RN">RN</option>
+                                <option value="RS">RS</option>
+                                <option value="RO">RO</option>
+                                <option value="RR">RR</option>
+                                <option value="SC">SC</option>
+                                <option value="SP">SP</option>
+                                <option value="SE">SE</option>
+                                <option value="TO">TO</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="telefone" class="form-label">Telefone</label>
+                            <input type="tel" class="form-control" id="telefone" name="Telefone" 
+                                   placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="data_matricula" class="form-label">Data de Matrícula</label>
+                            <input type="date" class="form-control" id="data_matricula" name="Data_Matricula">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="data_vencimento" class="form-label">Data de Vencimento</label>
+                            <input type="date" class="form-control" id="data_vencimento" name="Data_Vencimento">
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('web.listar_alunos') }}" class="btn btn-secondary me-md-2">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Alert para mensagens -->
+        <div id="mensagem" class="alert mt-3" style="display: none;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('formNovoAluno');
+    const mensagem = document.getElementById('mensagem');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Coletar dados do formulário
+        const formData = new FormData(form);
+        const dados = {};
+        
+        for (let [key, value] of formData.entries()) {
+            if (value.trim() !== '') {
+                dados[key] = value.trim();
+            }
+        }
+        
+        // Enviar para a API
+        axios.post('/api/alunos', dados)
+            .then(function(response) {
+                mensagem.className = 'alert alert-success mt-3';
+                mensagem.textContent = 'Aluno cadastrado com sucesso!';
+                mensagem.style.display = 'block';
+                
+                // Redirecionar após 2 segundos - CORREÇÃO AQUI
+                setTimeout(function() {
+                    window.location.href = `/alunos/${response.data.ID_Aluno}`;
+                }, 2000);
+            })
+            .catch(function(error) {
+                mensagem.className = 'alert alert-danger mt-3';
+                if (error.response && error.response.data && error.response.data.erro) {
+                    mensagem.textContent = 'Erro: ' + error.response.data.erro;
+                } else {
+                    mensagem.textContent = 'Erro ao cadastrar aluno. Tente novamente.';
+                }
+                mensagem.style.display = 'block';
+            });
+    });
+});
+</script>
+{% endblock %}

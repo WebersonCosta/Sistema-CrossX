@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block title %}CrossX - Detalhes do Aluno{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('web.listar_alunos') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Voltar para Lista
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title mb-0">Dados do Aluno</h2>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">ID:</dt>
+                    <dd class="col-sm-8">{{ aluno.ID_Aluno }}</dd>
+                    
+                    <dt class="col-sm-4">Nome:</dt>
+                    <dd class="col-sm-8">{{ aluno.Nome }}</dd>
+                    
+                    <dt class="col-sm-4">Endereço:</dt>
+                    <dd class="col-sm-8">{{ aluno.Endereco or '--' }}</dd>
+                    
+                    <dt class="col-sm-4">Cidade/Estado:</dt>
+                    <dd class="col-sm-8">{{ aluno.Cidade or '--' }}/{{ aluno.Estado or '--' }}</dd>
+                    
+                    <dt class="col-sm-4">Telefone:</dt>
+                    <dd class="col-sm-8">{{ aluno.Telefone or '--' }}</dd>
+                    
+                    <dt class="col-sm-4">Matrícula:</dt>
+                    <dd class="col-sm-8">{{ aluno.Data_Matricula or '--' }}</dd>
+                    
+                    <dt class="col-sm-4">Vencimento:</dt>
+                    <dd class="col-sm-8">{{ aluno.Data_Vencimento or '--' }}</dd>
+                    
+                    <dt class="col-sm-4">Situação:</dt>
+                    <dd class="col-sm-8">
+                        {% if aluno.Data_Desligamento %}
+                            <span class="badge bg-danger">Desligado</span>
+                        {% else %}
+                            <span class="badge bg-success">Ativo</span>
+                        {% endif %}
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editarAlunoModal">
+                    Editar Dados
+                </button>
+                {% if not aluno.Data_Desligamento %}
+                <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#desligarAlunoModal">
+                    Desligar Aluno
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h2 class="card-title mb-0">Pagamentos</h2>
+                <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#novoPagamentoModal">
+                    Novo Pagamento
+                </button>
+            </div>
+            <div class="card-body">
+                {% if pagamentos %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Data</th>
+                                <th>Valor</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pagamento in pagamentos %}
+                            <tr>
+                                <td>{{ pagamento.ID_Pagamento }}</td>
+                                <td>{{ pagamento.Data }}</td>
+                                <td>R$ {{ "%.2f"|format(pagamento.Valor) }}</td>
+                                <td>
+                                    {% if pagamento.Tipo == 'dinheiro' %}
+                                    <span class="badge bg-success">Dinheiro</span>
+                                    {% else %}
+                                    <span class="badge bg-primary">Cartão</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    Nenhum pagamento registrado para este aluno.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Novo Pagamento -->
+<div class="modal fade" id="novoPagamentoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Novo Pagamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formNovoPagamento">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="data_pagamento" class="form-label">Data do Pagamento</label>
+                        <input type="date" class="form-control" id="data_pagamento" name="Data">
+                    </div>
+                    <div class="mb-3">
+                        <label for="valor_pagamento" class="form-label">Valor (R$)*</label>
+                        <input type="number" class="form-control" id="valor_pagamento" name="Valor" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Pagamento*</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Tipo" id="tipo_dinheiro" value="dinheiro" checked>
+                            <label class="form-check-label" for="tipo_dinheiro">
+                                Dinheiro
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Tipo" id="tipo_cartao" value="cartão">
+                            <label class="form-check-label" for="tipo_cartao">
+                                Cartão
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Registrar Pagamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Aluno (simplificado para o exemplo) -->
+<div class="modal fade" id="editarAlunoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Editar Dados do Aluno</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEditarAluno">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome_aluno" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="nome_aluno" name="Nome" value="{{ aluno.Nome }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="endereco_aluno" class="form-label">Endereço</label>
+                        <input type="text" class="form-control" id="endereco_aluno" name="Endereco" value="{{ aluno.Endereco }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefone_aluno" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="telefone_aluno" name="Telefone" value="{{ aluno.Telefone }}">
+                    </div>
+                    <!-- Adicione mais campos conforme necessário -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Desligar Aluno -->
+<div class="modal fade" id="desligarAlunoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Desligar Aluno</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja desligar o aluno <strong>{{ aluno.Nome }}</strong>?</p>
+                <p>Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarDesligamento">Confirmar Desligamento</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alert para mensagens -->
+<div id="mensagem" class="alert mt-3" style="display: none;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const formPagamento = document.getElementById('formNovoPagamento');
+    const mensagem = document.getElementById('mensagem');
+    
+    formPagamento.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Coletar dados do formulário
+        const formData = new FormData(formPagamento);
+        const dados = {};
+        
+        for (let [key, value] of formData.entries()) {
+            if (value.trim() !== '') {
+                dados[key] = value.trim();
+            }
+        }
+        
+        // Enviar para a API
+        axios.post('/api/alunos/{{ aluno.ID_Aluno }}/pagamentos', dados)
+            .then(function(response) {
+                // Fechar o modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('novoPagamentoModal'));
+                modal.hide();
+                
+                // Exibir mensagem de sucesso
+                mensagem.className = 'alert alert-success mt-3';
+                mensagem.textContent = 'Pagamento registrado com sucesso!';
+                mensagem.style.display = 'block';
+                
+                // Recarregar a página após 2 segundos
+                setTimeout(function() {
+                    window.location.reload();
+                }, 2000);
+            })
+            .catch(function(error) {
+                mensagem.className = 'alert alert-danger mt-3';
+                if (error.response && error.response.data && error.response.data.erro) {
+                    mensagem.textContent = 'Erro: ' + error.response.data.erro;
+                } else {
+                    mensagem.textContent = 'Erro ao registrar pagamento. Tente novamente.';
+                }
+                mensagem.style.display = 'block';
+            });
+    });
+    
+    // Implementação básica do desligamento de aluno
+    const btnDesligar = document.getElementById('btnConfirmarDesligamento');
+    btnDesligar.addEventListener('click', function() {
+        axios.post('/api/alunos/{{ aluno.ID_Aluno }}/desligar', {}, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(function(response) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('desligarAlunoModal'));
+            modal.hide();
+
+            mensagem.className = 'alert alert-success mt-3';
+            mensagem.textContent = 'Aluno desligado com sucesso!';
+            mensagem.style.display = 'block';
+
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+        })
+        .catch(function(error) {
+            mensagem.className = 'alert alert-danger mt-3';
+            mensagem.textContent = 'Erro ao desligar o aluno.';
+            mensagem.style.display = 'block';
+        });
+    });
+
+    document.getElementById('formEditarAluno').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const dados = {};
+        formData.forEach((value, key) => {
+            dados[key] = value;
+        });
+
+        axios.put('/api/alunos/{{ aluno.ID_Aluno }}', dados)
+            .then(response => {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editarAlunoModal'));
+                modal.hide();
+                alert('Dados atualizados com sucesso!');
+                window.location.reload();
+            })
+            .catch(error => {
+                alert('Erro ao atualizar aluno.');
+                console.error(error);
+            });
+    });
+
+});
+</script>
+{% endblock %}

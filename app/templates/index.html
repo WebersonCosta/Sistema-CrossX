@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}CrossX - Página Inicial{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Bem-vindo ao Sistema CrossX!</h1>
+    <p class="lead">Sistema de gerenciamento de alunos e pagamentos.</p>
+    <hr class="my-4">
+    <p>Utilize os recursos abaixo para gerenciar alunos e pagamentos:</p>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Gerenciar Alunos</h5>
+                    <p class="card-text">Cadastre, visualize e atualize informações dos alunos.</p>
+                    <a href="{{ url_for('web.listar_alunos') }}" class="btn btn-primary">Ver Alunos</a>
+                    <a href="{{ url_for('web.novo_aluno_form') }}" class="btn btn-success">Novo Aluno</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">API de Acesso</h5>
+                    <p class="card-text">Acesse os endpoints da API diretamente.</p>
+                    <a href="{{ url_for('api_bp.hello_world') }}" class="btn btn-info" target="_blank">Testar API</a>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#apiInfoModal">
+                        Info da API
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal com informações da API -->
+<div class="modal fade" id="apiInfoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Informações da API</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Endpoints disponíveis:</h6>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item"><code>GET /api/</code> - Verificar status da API</li>
+                    <li class="list-group-item"><code>GET /api/alunos</code> - Listar todos os alunos</li>
+                    <li class="list-group-item"><code>POST /api/alunos</code> - Cadastrar novo aluno</li>
+                    <li class="list-group-item"><code>GET /api/alunos/{id}</code> - Obter detalhes de um aluno</li>
+                    <li class="list-group-item"><code>POST /api/alunos/{id}/pagamentos</code> - Criar pagamento para um aluno</li>
+                </ul>
+                
+                <h6>Exemplos de uso:</h6>
+                <pre><code>// Exemplo de requisição para criar aluno
+fetch('/api/alunos', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        Nome: "Nome do Aluno",
+        Telefone: "(11) 99999-9999",
+        Data_Matricula: "2025-05-01"
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
