@@ -2,23 +2,15 @@
 Este guia fornecerá instruções detalhadas sobre como configurar, instalar e testar o sistema CrossX. Este documento é destinado aos professores avaliadores do projeto.
 
 ## Sumário
-- Visão Geral do Projeto
-
-- Pré-requisitos
-
-- Instalação
-
-- Configuração
-
-- Execução do Sistema
-
-- Testando o Sistema
-
-- Estrutura do Projeto
-
-- API Documentation
-
-- Troubleshooting
+- [Visão Geral do Projeto](#visao-geral-do-projeto)
+- [Pré-requisitos](#pre-requisitos)
+- [Instalação](#instalacao)
+- [Configuração](#configuracao)
+- [Execução do Sistema](#execucao-do-sistema)
+- [Testando o Sistema](#testando-o-sistema)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [API Documentation](#api-documentation)
+- [Troubleshooting](#troubleshooting)
 
 ## Visão Geral do Projeto
 O **CrossX** é um sistema de gerenciamento para academias, permitindo o cadastro de alunos e o registro de pagamentos. O sistema possui uma interface web e uma API REST para manipulação dos dados.
